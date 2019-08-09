@@ -5,7 +5,8 @@ import { DirectThreadEntity } from 'instagram-private-api';
 module.exports.run = async (thread: DirectThreadEntity, message: DirectInboxFeedResponseItemsItem) => {
     switch (message.item_type) {
         case "text":
-            if (!message.text) return
+            if (!message.text) return            
+            console.log(message.text)
             if (!message.text.startsWith(index.config.prefix)) return
             let args = message.text.slice(index.config.prefix.length).split(/ +/g);
             let command = index.client.commands.registry[index.client.commands.map[args[0]]]
