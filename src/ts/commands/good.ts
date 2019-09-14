@@ -1,14 +1,13 @@
-import { DirectThreadEntity } from "instagram-private-api";
-import { DirectInboxFeedResponseItemsItem } from "instagram-private-api/dist/responses";
-
 import index = require("../index")
+import { Message } from "../typings/Client/Message";
 module.exports = {
     name: "good",
     aliases: [],
     usage: "good boi",
     description: "Makes this boi happy",
-    run: async function(thread: DirectThreadEntity, message: DirectInboxFeedResponseItemsItem, args: string[]): Promise<any> {
-        if (!args[0] || ["bot", "boi", "boy"].indexOf(args[0].toLowerCase()) === -1) return
-            return thread.broadcastText("❤️")
+    permission: 0,
+    run: async function(message: Message): Promise<any> {
+        if (!message.args[0] || ["bot", "boi", "boy"].indexOf(message.args[0].toLowerCase()) === -1) return
+            return message.thread.broadcastText("❤️")
     }
 }

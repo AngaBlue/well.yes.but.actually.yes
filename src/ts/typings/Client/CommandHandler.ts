@@ -35,7 +35,7 @@ export class CommandHandler {
 
     }
     public reload(commandResolvable: string): Command {
-        let command = this.registry[commandResolvable]
+        let command = this.registry[this.map[commandResolvable]]
         if (!command) throw new Error(`Unknown Command "${commandResolvable}"`)
         this.unload(command.name)
         return this.load(command.path)

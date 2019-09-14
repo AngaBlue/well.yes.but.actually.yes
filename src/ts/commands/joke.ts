@@ -1,14 +1,13 @@
 import * as Request from "request";
-
-import { DirectThreadEntity } from "instagram-private-api";
-import { DirectInboxFeedResponseItemsItem } from "instagram-private-api/dist/responses";
+import { Message } from "../typings/Client/Message";
 
 module.exports = {
     name: "joke",
     aliases: ["dad-joke"],
     usage: "joke",
     description: "Tells a really bad joke",
-        run: async function(thread: DirectThreadEntity, message: DirectInboxFeedResponseItemsItem, args: string[]): Promise<any> {
+    permission: 0,
+    run: async function (message: Message): Promise<any> {
         Request({
             url: "https://icanhazdadjoke.com/",
             method: 'GET',
@@ -16,7 +15,7 @@ module.exports = {
                 'Accept': 'text/plain',
             }
         }, (error, response, body) => {
-            return thread.broadcastText(body);
+            return message.thread.broadcastText(body);
         });
     }
 }

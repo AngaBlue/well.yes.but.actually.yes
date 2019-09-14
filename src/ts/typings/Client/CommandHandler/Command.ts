@@ -1,5 +1,4 @@
-import { DirectThreadEntity } from "instagram-private-api";
-import { DirectInboxFeedResponseItemsItem } from "instagram-private-api/dist/responses";
+import { Message } from "../Message";
 
 export interface Command {
     path: string,
@@ -7,8 +6,9 @@ export interface Command {
     aliases: string[],
     usage: string[],
     description: string,
-    permission: string,
-    run(thread: DirectThreadEntity, message: DirectInboxFeedResponseItemsItem, args: string[]): Promise<any>,
+    category: string,
+    permission: number,
+    run(message: Message): Promise<any>,
 }
 
 export class Command {
@@ -18,9 +18,10 @@ export class Command {
         this.path = path
         this.name = commandFile.name
         this.aliases = commandFile.aliases || []
-        this.description = commandFile.description || ""
         this.usage = commandFile.usage || commandFile.name
-        this.permission = commandFile.permission || "everyone"
+        this.description = commandFile.description || ""
+        this.category = commandFile.category || "general"
+        this.permission = commandFile.permission || 0
         this.run = commandFile.run || (() => { })
     }
 }

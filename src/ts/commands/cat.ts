@@ -1,14 +1,14 @@
 import * as Request from "request";
 
-import { DirectThreadEntity } from "instagram-private-api";
-import { DirectInboxFeedResponseItemsItem } from "instagram-private-api/dist/responses";
+import { Message } from "../typings/Client/Message";
 
 module.exports = {
     name: "cat",
     aliases: [],
     usage: "cat",
     description: "Provides a random cat",
-    run: async function (thread: DirectThreadEntity, message: DirectInboxFeedResponseItemsItem, args: string[]): Promise<any> {
+    permission: 0,
+    run: async function (message: Message): Promise<any> {
         Request({
             url: "https://api.thecatapi.com/v1/images/search",
             method: 'GET',
@@ -27,7 +27,7 @@ module.exports = {
                     allowFullAspectRatio: true
                 });
             })*/
-            thread.broadcastLink(json[0].url, [json[0].url])
+            message.thread.broadcastLink(json[0].url, [json[0].url])
         });
     }
 }

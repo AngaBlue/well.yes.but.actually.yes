@@ -11,13 +11,13 @@ export interface DatabaseConfig {
     database: string
 }
 
-export async function connect(databaseConfig: DatabaseConfig) {
+export async function connect(databaseConfig: DatabaseConfig): Promise<Database> {
     let db = mysql.createConnection(databaseConfig) as Database;
     db.asyncQuery = async function (sql: string, pool: any): Promise<any[]> {
         return new Promise(async (resolve, reject) => {
             db.query({
                 sql: sql,
-                values: [pool]
+                values: pool
             }, function (err, result) {
                 if (err) reject(err);
                 resolve(result);

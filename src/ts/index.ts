@@ -4,8 +4,8 @@ import * as Database from "./typings/Database"
 let config = require("./config.js");
 
 let client = new Client();
-export { client, config, Client };
-
+client.connectDB(config.database)
+export { client, config };
 //Load Commands
 let commandFiles = fs.readdirSync(`${__dirname}/commands`)
 commandFiles.forEach(file => {
@@ -21,11 +21,6 @@ fs.readdir(`${__dirname}/events/`, (err, files) => {
         client.events.on(eventName, (...args) => eventFunction.run(...args));
     });
 });
-
-//Database Connection
-Database.connect(config.database).then(db => {
-    exports.db = db
-})
 
 //Login
 console.log("Logging in...")
