@@ -6,6 +6,6 @@
     "watch": true,  
     "moduleResolution": "node",
     "outDir": "dist/commonjs",
-    "rootDir": "src/ts",                     /* Enable all strict type-checking options. */
+    "rootDir": "src/ts"                     /* Enable all strict type-checking options. */
     }
 }

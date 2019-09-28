@@ -13,7 +13,10 @@ export interface Command {
 
 export class Command {
     constructor(path: string) {
-        let commandFile = require(path)
+        let commandFile
+        try {
+            commandFile = require(path)
+        } catch (error) {} 
         if (!commandFile || !commandFile.name) throw new Error(`Unknown/Invalid Command File at "${path}"`)
         this.path = path
         this.name = commandFile.name

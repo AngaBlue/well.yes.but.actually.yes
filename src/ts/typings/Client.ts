@@ -10,6 +10,7 @@ export interface Client {
     commands: CommandHandler
     igLoggedIn: AccountRepositoryLoginResponseLogged_in_user
     db: Database.Database
+    created: number;
 }
 
 export class Client {
@@ -17,6 +18,7 @@ export class Client {
         this.ig = new IgApiClient
         this.commands = new CommandHandler
         this.events = new EventEmitter
+        this.created = Date.now()
     }
     async connectDB(dbConfig: Database.DatabaseConfig): Promise<any> {
         this.db = await Database.connect(dbConfig)

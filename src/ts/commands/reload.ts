@@ -11,7 +11,7 @@ module.exports = {
         message.args[0] = message.args[0].toLowerCase()
         try {
             let command = index.client.commands.reload(message.args[0])
-            return message.thread.broadcastText(`Reloaded ${index.config.prefix}${command.name} command.`)
+            return message.thread.broadcastText(`Reloaded ${index.config.prefix}${command.name.__bold()} command.`)
         } catch (error) {
             if (error.message.search("Unknown Command") > -1)
                 return message.thread.broadcastText(`Unknown Command "${message.args[0]}"`)

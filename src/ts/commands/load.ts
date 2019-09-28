@@ -11,10 +11,10 @@ module.exports = {
         message.args[0] = message.args[0].toLowerCase()
         try {
             let command = index.client.commands.load(`${__dirname}/${message.args[0]}`)
-            return message.thread.broadcastText(`Loaded ${index.config.prefix}${command.name} command.`)
+            return message.thread.broadcastText(`Loaded ${index.config.prefix}${command.name.__bold()} command.`)
         } catch (error) {
             console.log(error)
-            if (error.message.search("Unknown Command") > -1)
+            if (error.message.search("Unknown/Invalid Command") > -1)
                 return message.thread.broadcastText(`Unknown Command "commands/${message.args[0]}"`)
             return message.thread.broadcastText(`Error encountered while loading command. Please see logs for details`)
         }

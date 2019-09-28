@@ -7,4 +7,5 @@ export interface Message extends DirectInboxFeedResponseItemsItem {
     thread: DirectThreadEntity
     threadItem: DirectInboxFeedResponseThreadsItem
     args: string[]
+    argsString: string
 }

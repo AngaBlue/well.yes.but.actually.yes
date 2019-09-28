@@ -7,6 +7,6 @@ module.exports = {
     description: "Test command",
     permission: 0,
     run: async function(message: Message): Promise<any> {
-        return message.thread.broadcastText("Bot is online and responding! :)))")
+        return message.thread.broadcastText(`Bot is online and responding!`)
     }
 }

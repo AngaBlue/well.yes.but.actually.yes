@@ -7,7 +7,14 @@ module.exports.run = async () => {
     try {
         setInterval(async () => {
             const inboxFeed = index.client.ig.feed.directInbox();
-            let threads = await inboxFeed.items();
+            let threads
+            try {
+                threads = await inboxFeed.items() || []
+            } catch (e) {
+                if (e.error && e.error.code === "ETIMEDOUT") return
+                console.error(Object.keys(e), JSON.stringify(e, null, 2));
+            }
+            threads = threads || []
             threads.forEach(thread => {
                 if (thread.users.length !== 1) return
                 if (!thread.items[0]) return

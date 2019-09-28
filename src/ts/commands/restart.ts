@@ -8,7 +8,7 @@ module.exports = {
     description: "Restarts the bot",
     permission: 5,
     run: async function (message: Message): Promise<any> {
-        await message.thread.broadcastText(`Restarting...\nLast restarted ${moment(Date.now() - process.uptime()).fromNow()}`)
+        await message.thread.broadcastText(`${"Restarting...".__bold()}\nLast restarted ${moment(index.client.created).fromNow()}`)
         console.log("User triggered restart")
         process.exit(0)
     }

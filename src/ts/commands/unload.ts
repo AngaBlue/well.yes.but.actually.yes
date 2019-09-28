@@ -11,7 +11,7 @@ module.exports = {
         message.args[0] = message.args[0].toLowerCase()
         try {
             index.client.commands.unload(message.args[0])
-            return message.thread.broadcastText(`Unloaded ${index.config.prefix}${message.args[0]} command.`)
+            return message.thread.broadcastText(`Unloaded ${index.config.prefix}${message.args[0].__bold()} command.`)
         } catch (error) {
             if (error.message.search("Unknown Command") > -1)
                 return message.thread.broadcastText(`Unknown Command "${message.args[0]}"`)

@@ -8,7 +8,7 @@ module.exports = {
     permission: 0,
     run: async function(message: Message): Promise<any> {
         if (!message.args[0])
-            return message.thread.broadcastText("I can't just say nothing! :))")
-        return message.thread.broadcastText(message.args.join(" "))
+            return message.thread.broadcastText("I can't just say nothing!")
+        return message.thread.broadcastText(message.argsString)
     }
 }

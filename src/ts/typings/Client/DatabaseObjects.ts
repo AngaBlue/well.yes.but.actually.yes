@@ -7,5 +7,5 @@ export interface User {
 export interface Rank {
     id: number,
     name: string,
-    hierachy: number
+    permission: number
 }

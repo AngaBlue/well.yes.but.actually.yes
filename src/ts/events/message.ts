@@ -5,6 +5,10 @@ module.exports.run = async (threadItem: DirectInboxFeedResponseThreadsItem, mess
     let thread = index.client.ig.entity.directThread(threadItem.thread_id)
     switch (message.item_type) {
         case "text":
+        case "link":
+        case "reel_share":
+            //@ts-ignore
+            message.text = message.text || (message.link ? message.link.text : undefined) || (message.reel_share ? message.reel_share.text : undefined)
             if (!message.text) return
             //Get User Object
             await index.client.db.asyncQuery!(`INSERT INTO users (id, username, rank) 
@@ -24,15 +28,20 @@ module.exports.run = async (threadItem: DirectInboxFeedResponseThreadsItem, mess
             if (user.rank.name === "Banned")
                 return thread.broadcastText(`You have been banned from using ${index.client.igLoggedIn.username}`)
             //Check Permission
-            if (user.rank.hierachy < command.permission)
-                return thread.broadcastText(`You don't have permission to use the ${index.config.prefix}${command.name} command.\nPermission Level Required: ${command.permission}`)
+            if (user.rank.permission < command.permission)
+                return thread.broadcastText(`You don't have permission to use the ${index.config.prefix}${command.name.__bold()} command.\n${"Permission Level Required".__bold()}: ${command.permission}`)
             //Run Command
-            command.run(Object.assign(message, {
-                user: user,
-                args: args,
-                thread: thread,
-                threadItem: threadItem
-            }))
+            try {
+                command.run(Object.assign(message, {
+                    user: user,
+                    args: args,
+                    argsString: message.text.slice(index.config.prefix.length).split(/ (.+)/)[1] || "",
+                    thread: thread,
+                    threadItem: threadItem
+                }))
+            } catch (error) {
+                index.client.events.emit("commandError", command, error)
+            }
             break;
         case "like":
             thread.broadcastText("❤️")
@@ -42,6 +51,7 @@ module.exports.run = async (threadItem: DirectInboxFeedResponseThreadsItem, mess
             console.log(message.media.image_versions2.candidates)
             break
         default:
+            console.log(message)
             break;
     }
 }
