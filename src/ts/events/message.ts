@@ -11,13 +11,15 @@ module.exports.run = async (threadItem: DirectInboxFeedResponseThreadsItem, mess
             message.text = message.text || (message.link ? message.link.text : undefined) || (message.reel_share ? message.reel_share.text : undefined)
             if (!message.text) return
             //Get User Object
+            let threadUser = threadItem.users.find(user => user.pk === message.user_id) || index.client.igLoggedIn
             await index.client.db.asyncQuery!(`INSERT INTO users (id, username, rank) 
                         VALUES (?, ?, ?) 
                         ON DUPLICATE KEY UPDATE 
-                        username = VALUES(username);`, [message.user_id, threadItem.users[0].username, 1])
+                        username = VALUES(username);`, [message.user_id, threadUser.username, 1])
             let user = (await index.client.db.asyncQuery!(`SELECT * FROM users WHERE id = ?`, message.user_id))[0]
             user.rank = (await index.client.db.asyncQuery!(`SELECT * FROM ranks WHERE id = ?`, user.rank))[0]
-            console.log(`${user.username}: ${message.text}`)
+            if (user.id !== index.client.igLoggedIn.pk)
+                console.log(`${user.username}: ${message.text}`)
             //Check if the message is a command
             if (!message.text.startsWith(index.config.prefix)) return
             let args = message.text.slice(index.config.prefix.length).split(/ +/g);
@@ -37,7 +39,8 @@ module.exports.run = async (threadItem: DirectInboxFeedResponseThreadsItem, mess
                     args: args,
                     argsString: message.text.slice(index.config.prefix.length).split(/ (.+)/)[1] || "",
                     thread: thread,
-                    threadItem: threadItem
+                    threadItem: threadItem,
+                    threadUser: threadUser
                 }))
             } catch (error) {
                 index.client.events.emit("commandError", command, error)

@@ -16,11 +16,10 @@ module.exports.run = async () => {
             }
             threads = threads || []
             threads.forEach(thread => {
-                if (thread.users.length !== 1) return
                 if (!thread.items[0]) return
                 for (let i in thread.items) {
                     //Check if Message Author is Client
-                    if (thread.items[i].user_id === index.client.igLoggedIn.pk) continue
+                    //if (thread.items[i].user_id === index.client.igLoggedIn.pk) continue
                     let timestamp = parseInt(thread.items[i].timestamp.slice(0, -3))
                     //Check Longer than 3 secs ago
                     if (Date.now() - 3000 > timestamp) return

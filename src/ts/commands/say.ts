@@ -9,6 +9,7 @@ module.exports = {
     run: async function(message: Message): Promise<any> {
         if (!message.args[0])
             return message.thread.broadcastText("I can't just say nothing!")
-        return message.thread.broadcastText(message.argsString)
+        //Zero Width Space Added to Start of Message
+        return message.thread.broadcastText(`​${message.argsString}`)
     }
 }
