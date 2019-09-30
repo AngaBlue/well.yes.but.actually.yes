@@ -9,3 +9,10 @@ export interface Rank {
     name: string,
     permission: number
 }
+
+export interface Reminder {
+    id: number,
+    user: number,
+    message: string,
+    time: number
+}

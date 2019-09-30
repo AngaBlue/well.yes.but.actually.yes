@@ -53,6 +53,9 @@ module.exports.run = async (threadItem: DirectInboxFeedResponseThreadsItem, mess
             //@ts-ignore
             console.log(message.media.image_versions2.candidates)
             break
+        case "raven_media":
+        case "action_log":
+            break;
         default:
             console.log(message)
             break;

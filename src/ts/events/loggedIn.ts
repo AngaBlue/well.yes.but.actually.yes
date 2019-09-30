@@ -1,10 +1,12 @@
 import index = require("../index")
+import { Reminder } from "../typings/Client/DatabaseObjects"
 
 let lastMessageReceived: { [index: string]: number } = {}
 module.exports.run = async () => {
     console.log(`Logged in as "${index.client.igLoggedIn.username}"`)
     console.log(`Bot online and listening for messages...`)
     try {
+        //Check Messages
         setInterval(async () => {
             const inboxFeed = index.client.ig.feed.directInbox();
             let threads
@@ -18,8 +20,6 @@ module.exports.run = async () => {
             threads.forEach(thread => {
                 if (!thread.items[0]) return
                 for (let i in thread.items) {
-                    //Check if Message Author is Client
-                    //if (thread.items[i].user_id === index.client.igLoggedIn.pk) continue
                     let timestamp = parseInt(thread.items[i].timestamp.slice(0, -3))
                     //Check Longer than 3 secs ago
                     if (Date.now() - 3000 > timestamp) return
@@ -31,6 +31,18 @@ module.exports.run = async () => {
                 }
             })
         }, 500)
+        //Reminders
+        setInterval(async () => {
+            let timestamp = Date.now()
+            let reminders: Reminder[] = await index.client.db.asyncQuery!(`SELECT * FROM reminders WHERE time < ?`, timestamp)
+            reminders.forEach((reminder: Reminder) => {
+                index.client.ig.entity.directThread([reminder.user.toString()]).broadcastText([
+                    "Reminder".__bold(),
+                    reminder.message
+                ].join("\n"));
+            })
+            index.client.db.asyncQuery!(`DELETE FROM reminders WHERE time < ?`, timestamp)
+        }, 3000)
     } catch (error) {
         console.error(error.name)
     }

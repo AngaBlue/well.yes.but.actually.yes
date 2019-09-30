@@ -11,7 +11,11 @@ module.exports = {
         if (!message.args[0]) {
             return message.thread.broadcastText([
                 "Commands".__bold(),
-                ...Object.values(index.client.commands.registry).map((command: Command) => `${index.config.prefix}${command.name.__bold()}: ${command.description}`),
+                ...Object.values(index.client.commands.registry).reduce((result: string[], command: Command) => {
+                    if (message.user.rank.permission >= command.permission)
+                        result.push(`${index.config.prefix}${command.name.__bold()}: ${command.description}`)
+                    return result;
+                }, []),
                 "\nUse !help <command> to get more information on specific command usage"
             ].join("\n"));
         } else {
